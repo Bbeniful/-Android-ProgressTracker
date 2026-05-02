@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/design" />
+            <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/add" />
+            <option value="$PROJECT_DIR$/feature/add/api" />
+            <option value="$PROJECT_DIR$/feature/add/api/nav" />
+            <option value="$PROJECT_DIR$/feature/add/impl" />
+            <option value="$PROJECT_DIR$/feature/home" />
+            <option value="$PROJECT_DIR$/feature/home/api" />
+            <option value="$PROJECT_DIR$/feature/home/api/nav" />
+            <option value="$PROJECT_DIR$/feature/home/impl" />
+            <option value="$PROJECT_DIR$/feature/progress" />
+            <option value="$PROJECT_DIR$/feature/progress/api" />
+            <option value="$PROJECT_DIR$/feature/progress/api/nav" />
+            <option value="$PROJECT_DIR$/feature/progress/impl" />
+            <option value="$PROJECT_DIR$/navigation" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
