@@ -8,7 +8,8 @@ import com.bbeniful.domain.model.Exercise
 data class HomeState(
     val dailyBodyPart: String = "",
     val exercises: List<Exercise> = emptyList(),
-    val currentDay: Day = Day.Unknown
+    val currentDay: Day = Day.Unknown,
+    val userSelectedDay: Day? = null
 )
 
 sealed interface HomeIntent {

@@ -4,18 +4,13 @@ package com.bbeniful.home.impl.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,7 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,6 +26,7 @@ import com.bbeniful.domain.model.Day
 import com.bbeniful.domain.model.Exercise
 import com.bbeniful.home.impl.ui.component.DailyExercises
 import com.bbeniful.home.impl.ui.component.Days
+import com.bbeniful.home.impl.ui.component.ProgressHalfSheet
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -42,24 +37,28 @@ fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
 
     HomeContent(
         dailyBodyPart = state.dailyBodyPart,
-        exercise = state.exercises,
-        onDayClick = { _ -> },
-        onExerciseClick = { _ -> }
+        exercises = state.exercises,
+        currentDay = state.currentDay,
+        selectedDay = state.userSelectedDay ?: state.currentDay,
+        onEvent = viewModel::setEvent
     )
 }
 
 @Composable
 internal fun HomeContent(
     dailyBodyPart: String,
-    exercise: List<Exercise>,
-    onDayClick: (Day) -> Unit,
-    onExerciseClick: (Int) -> Unit
+    exercises: List<Exercise>,
+    currentDay: Day,
+    selectedDay: Day,
+    onEvent: (HomeIntent) -> Unit
 ) {
+
+    // Tmp exercise nam,e
+    var exerciseName by remember { mutableStateOf("") }
 
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    // 1. Create the state. skipPartiallyExpanded = false allows the "half-way" stop.
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
@@ -70,18 +69,22 @@ internal fun HomeContent(
             .padding(16.dp)
     ) {
         Days(
-            currentDay = Day.Wednesday,
+            currentDay = currentDay,
             restDay = Day.Wednesday,
-            onDayClick = onDayClick
+            selectedDay = selectedDay,
+            onDayClick = { day ->
+                onEvent(HomeIntent.DaySelected(selectedDay = day))
+            },
         )
         Spacer(modifier = Modifier.height(50.dp))
 
         DailyExercises(
             dailyBodyParts = dailyBodyPart,
-            exercises = exercise,
+            exercises = exercises,
             onExerciseClick = { exerciseId ->
                 showBottomSheet = true
-                onExerciseClick(exerciseId)
+                //onExerciseClick(exerciseId)
+                exerciseName = exercises.find { it.id == exerciseId }?.name ?: "Not found"
 
             }
         )
@@ -94,31 +97,11 @@ internal fun HomeContent(
             containerColor = halfSheetBg,
             shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
         ) {
-            // 3. Sheet Content
-            SheetContent(onClose = {
+            ProgressHalfSheet(exerciseName) {
                 scope.launch { sheetState.hide() }.invokeOnCompletion {
                     if (!sheetState.isVisible) showBottomSheet = false
                 }
-            })
-        }
-    }
-}
-
-@Composable
-fun SheetContent(onClose: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.7f)
-            .padding(bottom = 32.dp, start = 16.dp, end = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Half Sheet Dialog", style = MaterialTheme.typography.headlineSmall)
-        Spacer(modifier = Modifier.height(16.dp))
-        Text("This sheet stops at 50% height first.")
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = onClose) {
-            Text("Close Sheet")
+            }
         }
     }
 }

@@ -4,10 +4,11 @@ import com.bbeniful.domain.model.Workout
 import com.bbeniful.domain.repository.ExerciseRepository
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Provided
 
-//@Factory
+@Factory
 class CreateWeekWorkoutPlaneUseCase(
-    private val exerciseRepository: ExerciseRepository
+    @Provided private val exerciseRepository: ExerciseRepository
 ) {
 
     operator fun invoke() = groupExercisesByDay().map { Workout(workoutForWeek = it) }

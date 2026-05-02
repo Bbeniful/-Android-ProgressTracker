@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.koin.compiler)
 }
 
@@ -30,6 +29,13 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xexplicit-backing-fields")
     }
+}
+
+koinCompiler {
+
+    compileSafety = false
+
+    userLogs = true
 }
 
 dependencies {

@@ -15,3 +15,7 @@ val dayTextColor = Color(0xff594983)
 val dayBorder = Color(0xff49454F)
 
 val normalTextColor = Color(0xffE6E0EB)
+
+val addNewLogSmallBg = Color(0xff2B2931)
+
+val darkTextColor = Color(0xff37265E)
