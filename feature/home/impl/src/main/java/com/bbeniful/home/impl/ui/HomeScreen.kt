@@ -13,7 +13,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -24,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bbeniful.design.halfSheetBg
 import com.bbeniful.domain.model.Day
 import com.bbeniful.domain.model.Exercise
+import com.bbeniful.domain.model.Progress
 import com.bbeniful.home.impl.ui.component.DailyExercises
 import com.bbeniful.home.impl.ui.component.Days
 import com.bbeniful.home.impl.ui.component.ProgressHalfSheet
@@ -39,8 +42,12 @@ fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
         dailyBodyPart = state.dailyBodyPart,
         exercises = state.exercises,
         currentDay = state.currentDay,
+        progresses = state.progresses,
         selectedDay = state.userSelectedDay ?: state.currentDay,
-        onEvent = viewModel::setEvent
+        onEvent = viewModel::setEvent,
+        progressSheetOpen = { id ->
+            viewModel.updateProgresses(exerciseId = id)
+        }
     )
 }
 
@@ -50,11 +57,13 @@ internal fun HomeContent(
     exercises: List<Exercise>,
     currentDay: Day,
     selectedDay: Day,
+    progresses: List<Progress>,
+    progressSheetOpen: (Int) -> Unit,
     onEvent: (HomeIntent) -> Unit
 ) {
 
     // Tmp exercise nam,e
-    var exerciseName by remember { mutableStateOf("") }
+    var exerciseIdSaved by remember { mutableIntStateOf(-1) }
 
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -62,6 +71,12 @@ internal fun HomeContent(
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
+
+    LaunchedEffect(showBottomSheet) {
+        if (showBottomSheet) {
+            progressSheetOpen(exerciseIdSaved)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -84,7 +99,7 @@ internal fun HomeContent(
             onExerciseClick = { exerciseId ->
                 showBottomSheet = true
                 //onExerciseClick(exerciseId)
-                exerciseName = exercises.find { it.id == exerciseId }?.name ?: "Not found"
+                exerciseIdSaved = exerciseId
 
             }
         )
@@ -97,11 +112,19 @@ internal fun HomeContent(
             containerColor = halfSheetBg,
             shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
         ) {
-            ProgressHalfSheet(exerciseName) {
+            ProgressHalfSheet(exerciseName = exercises.find { it.id == exerciseIdSaved }?.name ?: "Exercise doesn't exist", progresses = progresses, onClose = {
                 scope.launch { sheetState.hide() }.invokeOnCompletion {
                     if (!sheetState.isVisible) showBottomSheet = false
                 }
-            }
+            }, onSave = { min, max ->
+                onEvent(
+                    HomeIntent.SaveProgress(
+                        id = exerciseIdSaved,
+                        min = min,
+                        max = max
+                    )
+                )
+            })
         }
     }
 }

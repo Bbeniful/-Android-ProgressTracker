@@ -5,4 +5,6 @@ import com.bbeniful.domain.model.Day
 interface DateProvider {
 
     fun getCurrentDay(): Day
+
+    fun getCurrentDateAsFormattedString(): String
 }

@@ -8,6 +8,8 @@ import com.bbeniful.domain.provider.DateProvider
 import com.bbeniful.domain.usecase.CreateWeekWorkoutPlaneUseCase
 import com.bbeniful.domain.usecase.GetDailyBodyUseCase
 import com.bbeniful.domain.usecase.GetProgressForExerciseUseCase
+import com.bbeniful.domain.usecase.SaveProgressUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +22,7 @@ class HomeViewModel(
     private val createWeekWorkoutPlaneUseCase: CreateWeekWorkoutPlaneUseCase,
     private val dailyBodyParts: GetDailyBodyUseCase,
     private val getProgressForExerciseUseCase: GetProgressForExerciseUseCase,
+    private val saveProgressUseCase: SaveProgressUseCase,
     private val dateProvider: DateProvider
 
 ) : ViewModel() {
@@ -57,6 +60,14 @@ class HomeViewModel(
             HomeIntent.ResetSelectedDay -> {}
             HomeIntent.SelectCurrentDay -> {
 
+            }
+
+            is HomeIntent.SaveProgress -> {
+                saveProgress(
+                    exerciseId = event.id,
+                    min = event.min,
+                    max = event.max
+                )
             }
         }
     }
@@ -99,6 +110,38 @@ class HomeViewModel(
                 state.update {
                     it.copy(
                         dailyBodyPart = bodyParts ?: "Rest day Baby"
+                    )
+                }
+            }
+        }
+    }
+
+
+    fun saveProgress(
+        exerciseId: Int,
+        min: Int,
+        max: Int
+    ) {
+        viewModelScope.launch(
+            Dispatchers.IO
+        ) {
+            saveProgressUseCase(
+                exerciseId = exerciseId,
+                min = min, max = max
+            )
+        }
+    }
+
+    fun updateProgresses(exerciseId: Int) {
+        viewModelScope.launch {
+            getProgressForExerciseUseCase(
+                exerciseId = exerciseId
+            ).collect { progresses ->
+                state.update {
+                    it.copy(
+                        progresses = progresses
+                            .sortedByDescending { progress -> progress.timestamp }
+                            .take(3)
                     )
                 }
             }

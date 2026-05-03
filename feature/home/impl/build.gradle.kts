@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.bbeniful.impl"
+    namespace = "com.bbeniful.feature.home.impl"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
