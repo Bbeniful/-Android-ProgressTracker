@@ -11,6 +11,6 @@ class GetDailyBodyUseCase(
 ) {
 
     operator fun invoke(day: Day) = createWeekWorkoutPlaneUseCase().map { workout ->
-        workout.workoutForWeek[day.raw]?.groupBy { it.type }?.keys?.joinToString(", ")
+        workout.workoutForWeek[day.raw]?.groupBy { it.muscleGroup }?.keys?.joinToString(", ")
     }
 }

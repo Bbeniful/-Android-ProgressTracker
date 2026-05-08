@@ -1,6 +1,9 @@
 package com.bbeniful.data
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.dataStoreFile
 import androidx.room.Room
 import com.bbeniful.data.dao.ExerciseDao
 import com.bbeniful.data.dao.ProgressDao
@@ -14,13 +17,14 @@ import org.koin.core.annotation.Single
 @Module(includes = [DomainModule::class])
 @ComponentScan("com.bbeniful.data")
 class DataModule {
+
     @Single
     fun provideDatabase(context: Context): ProgressTrackDatabase {
         return Room.databaseBuilder(
             context,
             ProgressTrackDatabase::class.java,
             "progress_tracker_db"
-        ).build()
+        ).addMigrations(ProgressTrackDatabase.MIGRATION_1_2).build()
     }
 
     @Single
@@ -32,6 +36,12 @@ class DataModule {
     fun provideProgressDao(db: ProgressTrackDatabase): ProgressDao {
         return db.progressDao()
     }
+
+    @Single
+    fun provideUserProfileDataStore(context: Context): DataStore<UserProfileProto> {
+        return DataStoreFactory.create(
+            serializer = UserProfileSerializer,
+            produceFile = { context.dataStoreFile("user_profile.pb") }
+        )
+    }
 }
-
-

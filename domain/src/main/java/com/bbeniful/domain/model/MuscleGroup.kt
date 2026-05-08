@@ -1,8 +1,8 @@
 package com.bbeniful.domain.model
 
-import com.bbeniful.domain.model.BodyPart.entries
+import com.bbeniful.domain.model.MuscleGroup.entries
 
-enum class BodyPart(val raw: String) {
+enum class MuscleGroup(val raw: String) {
         Chest("Chest"),
         Back("Back"),
         Shoulder("Shoulder"),
@@ -16,5 +16,5 @@ enum class BodyPart(val raw: String) {
     }
 }
 
-val BodyPart.names: List<String>
+val MuscleGroup.names: List<String>
     get() = entries.map { it.raw }

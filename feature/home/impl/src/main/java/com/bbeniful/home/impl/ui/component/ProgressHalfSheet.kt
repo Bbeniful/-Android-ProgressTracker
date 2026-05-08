@@ -2,8 +2,10 @@ package com.bbeniful.home.impl.ui.component
 
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,23 +22,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -60,15 +65,10 @@ fun ProgressHalfSheet(
     exerciseName: String,
     progresses: List<Progress>,
     onClose: () -> Unit,
-    onSave: (Int, Int) -> Unit
+    onSave: (Int, Int) -> Unit,
+    onDelete: (Progress) -> Unit,
+    onViewAll: () -> Unit = {}
 ) {
-
-    val fakeProgresses = listOf(
-        Progress(id = 1, exerciseId = 101, timestamp = "2026-04-01", min = 40, max = 60),
-        Progress(id = 2, exerciseId = 101, timestamp = "2026-04-15", min = 45, max = 65),
-        Progress(id = 3, exerciseId = 101, timestamp = "2026-05-01", min = 50, max = 70)
-    ).sortedByDescending { it.timestamp }
-
     val halfSheetAnimatedSize = animateFloatAsState(
         targetValue = if (progresses.isEmpty()) 0.5f else 0.7f
     )
@@ -103,9 +103,7 @@ fun ProgressHalfSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(0.2f)
-                    .clickable {
-                        onClose()
-                    },
+                    .clickable { onClose() },
                 textAlign = TextAlign.End,
                 text = "X",
                 fontSize = 25.sp,
@@ -115,7 +113,7 @@ fun ProgressHalfSheet(
 
         AddNewLog(onSave = onSave)
         Spacer(modifier = Modifier.height(20.dp))
-        ProgressList(progresses = progresses) { }
+        ProgressList(progresses = progresses, onDelete = onDelete, onViewAllClicked = onViewAll)
     }
 }
 
@@ -125,9 +123,13 @@ internal fun AddNewLog(
     onSave: (Int, Int) -> Unit
 ) {
     var minWeight by remember { mutableStateOf("") }
+    var minError by remember { mutableStateOf(false) }
+
     var maxWeight by remember { mutableStateOf("") }
+    var maxError by remember { mutableStateOf(false) }
 
     val localeKeyboard = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     val isKeyboardVisible = WindowInsets.isImeVisible
 
     Column(
@@ -156,11 +158,11 @@ internal fun AddNewLog(
                 value = minWeight,
                 onValueChange = { minWeight = it },
                 label = { Text("Start Weight (kg)") },
-                placeholder = { Text("0.0") },
+                placeholder = { Text("0") },
                 modifier = Modifier.weight(1f),
-                isError = minWeight.isEmpty(),
+                isError = minError,
                 shape = RoundedCornerShape(16.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = Color(0xFFE1D5E7),
@@ -173,11 +175,11 @@ internal fun AddNewLog(
                 value = maxWeight,
                 onValueChange = { maxWeight = it },
                 label = { Text("Max Weight (kg)") },
-                placeholder = { Text("0.0") },
+                placeholder = { Text("0") },
                 modifier = Modifier.weight(1f),
-                isError = maxWeight.isEmpty(),
+                isError = maxError,
                 shape = RoundedCornerShape(16.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = Color(0xFFE1D5E7),
@@ -198,13 +200,15 @@ internal fun AddNewLog(
                 if (isKeyboardVisible) {
                     localeKeyboard?.hide()
                 }
-                if (!validateWeight(
-                        min = minWeight,
-                        max = maxWeight
-                    )
-                ) {
-                    return@Button
-                }
+                focusManager.clearFocus()
+
+                val isMinInvalid = minWeight.isEmpty() || !minWeight.isDigitsOnly()
+                val isMaxInvalid = maxWeight.isEmpty() || !maxWeight.isDigitsOnly()
+
+                minError = isMinInvalid
+                maxError = isMaxInvalid
+
+                if (isMinInvalid || isMaxInvalid) return@Button
 
                 onSave(minWeight.toInt(), maxWeight.toInt())
                 minWeight = ""
@@ -226,39 +230,81 @@ internal fun AddNewLog(
 @Composable
 internal fun ProgressList(
     progresses: List<Progress>,
+    onDelete: (Progress) -> Unit,
     onViewAllClicked: () -> Unit
 ) {
+    if (progresses.isEmpty()) return
 
-    if (progresses.isEmpty()) {
-        return
-    }
-
-    Column() {
+    Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(text = "Previous Logs", fontSize = 16.sp, color = normalTextColor)
-            Text(modifier = Modifier.clickable {
-                onViewAllClicked()
-            }, text = "View All", fontSize = 14.sp, color = normalTextColor)
+            Text(
+                modifier = Modifier.clickable { onViewAllClicked() },
+                text = "View All",
+                fontSize = 14.sp,
+                color = normalTextColor
+            )
         }
         Spacer(modifier = Modifier.height(20.dp))
 
-        LazyColumn() {
-            items(progresses) { progress ->
-                ProgressItem(isFirst = progress.id == progresses[0].id, progress = progress)
+        LazyColumn {
+            itemsIndexed(progresses, key = { _, p -> p.id }) { index, progress ->
+                val prev = progresses.getOrNull(index + 1)
+                ProgressItem(
+                    isFirst = index == 0,
+                    progress = progress,
+                    minDiff = prev?.let { progress.min - it.min },
+                    maxDiff = prev?.let { progress.max - it.max },
+                    onDelete = onDelete
+                )
             }
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun ProgressItem(isFirst: Boolean, progress: Progress) {
+internal fun ProgressItem(
+    isFirst: Boolean,
+    progress: Progress,
+    minDiff: Int? = null,
+    maxDiff: Int? = null,
+    onDelete: (Progress) -> Unit
+) {
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Delete log?") },
+            text = { Text("Remove the log from ${progress.timestamp}?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    onDelete(progress)
+                    showDeleteDialog = false
+                }) {
+                    Text("Delete", color = Color(0xFFD32F2F))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(70.dp),
+            .height(70.dp)
+            .combinedClickable(
+                onClick = {},
+                onLongClick = { showDeleteDialog = true }
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
@@ -279,19 +325,22 @@ internal fun ProgressItem(isFirst: Boolean, progress: Progress) {
         }
 
         Spacer(modifier = Modifier.width(10.dp))
-        Column() {
+        Column {
             Text(text = progress.timestamp, fontSize = 11.sp, color = normalTextColor)
-            Text(text = progress.createMinMax(), fontSize = 14.sp, color = normalTextColor)
+            Text(text = progress.createMinMax(minDiff, maxDiff), fontSize = 14.sp, color = normalTextColor)
         }
     }
 }
 
+fun Progress.createMinMax(minDiff: Int? = null, maxDiff: Int? = null): String {
+    val minPart = "Start: ${this.min}kg${formatDiff(minDiff)}"
+    val maxPart = "Max: ${this.max}kg${formatDiff(maxDiff)}"
+    return "$minPart | $maxPart"
+}
 
-fun Progress.createMinMax() = "Start: ${this.min}kg | Max: ${this.max}kg"
-
-fun validateWeight(min: String, max: String): Boolean {
-    if (min.isEmpty() || max.isEmpty()) return false
-    if (!min.isDigitsOnly() || !max.isDigitsOnly()) return false
-
-    return true
+private fun formatDiff(diff: Int?): String = when {
+    diff == null -> ""
+    diff > 0 -> " (+$diff)"
+    diff < 0 -> " ($diff)"
+    else -> ""
 }

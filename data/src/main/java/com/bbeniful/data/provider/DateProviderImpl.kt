@@ -1,9 +1,10 @@
-package com.bbeniful.data
+package com.bbeniful.data.provider
 
 import com.bbeniful.domain.model.Day
 import com.bbeniful.domain.provider.DateProvider
 import org.koin.core.annotation.Single
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
@@ -14,12 +15,17 @@ class DateProviderImpl : DateProvider {
     override fun getCurrentDay(): Day {
         val dayOfWeek = LocalDate.now().dayOfWeek
         val dayName = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
-        return Day.from(dayName)
+        return Day.Companion.from(dayName)
     }
 
     override fun getCurrentDateAsFormattedString(): String {
-        val current = LocalDate.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd")
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd, HH:mm:ss")
         return current.format(formatter)
+    }
+
+    override fun getCurrentDateOnly(): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd")
+        return LocalDate.now().format(formatter)
     }
 }

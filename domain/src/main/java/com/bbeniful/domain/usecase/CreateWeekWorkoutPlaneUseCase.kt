@@ -14,6 +14,8 @@ class CreateWeekWorkoutPlaneUseCase(
     operator fun invoke() = groupExercisesByDay().map { Workout(workoutForWeek = it) }
 
     private fun groupExercisesByDay() = exerciseRepository.getAll().map { exercises ->
-        exercises.groupBy { exercise -> exercise.day }
+        exercises
+            .filter { it.isActive }
+            .groupBy { exercise -> exercise.day }
     }
 }

@@ -1,7 +1,7 @@
 package com.bbeniful.home.impl.ui.component
 
-import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,18 +15,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bbeniful.design.dayBorder
@@ -36,17 +36,16 @@ import com.bbeniful.design.progressIconTint
 import com.bbeniful.domain.model.Exercise
 import com.bbeniful.feature.home.impl.R
 
+private val doneGreen = Color(0xFF4CAF50)
+
 @Composable
 fun DailyExercises(
     dailyBodyParts: String,
     exercises: List<Exercise>,
-    onExerciseClick: (Int) -> Unit
+    today: String,
+    onExerciseClick: (Int) -> Unit,
+    onToggleDone: (Exercise) -> Unit
 ) {
-
-    LaunchedEffect(exercises) {
-        Log.e("Exercise list", "${exercises.map { it.id }}")
-    }
-
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -55,22 +54,24 @@ fun DailyExercises(
             Text(text = "Today: $dailyBodyParts", color = normalTextColor, fontSize = 16.sp)
         }
 
-        items(exercises) { exercise ->
+        items(exercises, key = { it.id }) { exercise ->
             ExerciseItem(
                 exercise = exercise,
-                onExerciseClick = onExerciseClick
+                isDone = exercise.completedDate == today,
+                onExerciseClick = onExerciseClick,
+                onToggleDone = onToggleDone
             )
         }
     }
 }
 
-
 @Composable
 internal fun ExerciseItem(
     exercise: Exercise,
-    onExerciseClick: (Int) -> Unit
+    isDone: Boolean,
+    onExerciseClick: (Int) -> Unit,
+    onToggleDone: (Exercise) -> Unit
 ) {
-
     val currentOnExerciseClick by rememberUpdatedState(onExerciseClick)
 
     Row(
@@ -81,10 +82,7 @@ internal fun ExerciseItem(
             .padding(horizontal = 16.dp)
             .pointerInput(exercise.id) {
                 detectTapGestures(
-                    onLongPress = {
-                        Log.e("Exercise", "ID: ${exercise.id}")
-                        currentOnExerciseClick(exercise.id)
-                    }
+                    onLongPress = { currentOnExerciseClick(exercise.id) }
                 )
             },
         verticalAlignment = Alignment.CenterVertically
@@ -103,19 +101,28 @@ internal fun ExerciseItem(
             )
         }
         Spacer(modifier = Modifier.width(10.dp))
-        Column {
-            Text(
-                text = exercise.name,
-                color = normalTextColor, fontSize = 16.sp
-            )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = exercise.name, color = normalTextColor, fontSize = 16.sp)
             Text(
                 text = exercise.createSets(),
                 color = normalTextColor.copy(alpha = 0.8f),
-                fontSize = 16.sp
+                fontSize = 14.sp
             )
         }
+
+        // circular done checkbox
+        Box(
+            modifier = Modifier
+                .size(28.dp)
+                .then(
+                    if (isDone) Modifier.background(doneGreen, CircleShape)
+                    else Modifier.border(2.dp, Color.White, CircleShape)
+                )
+                .pointerInput(exercise.id) {
+                    detectTapGestures(onTap = { onToggleDone(exercise) })
+                }
+        )
     }
 }
 
-
-fun Exercise.createSets() = "${this.circle} sets x ${this.rep} reps"
+fun Exercise.createSets() = "${this.sets} sets x ${this.rep} reps"

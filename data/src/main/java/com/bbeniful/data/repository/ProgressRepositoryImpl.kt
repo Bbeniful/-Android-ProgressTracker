@@ -23,4 +23,7 @@ class ProgressRepositoryImpl(
 
     override suspend fun remove(progress: Progress) =
         progressDataSource.remove(progressDto = progress.toData)
+
+    override suspend fun deleteOlderThan(cutoffDate: String) =
+        progressDataSource.deleteOlderThan(cutoffDate)
 }

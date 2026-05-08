@@ -20,5 +20,8 @@ interface ProgressDao {
 
     @Delete
     fun remove(progressDto: ProgressDto)
+
+    @Query("DELETE FROM progress_table WHERE timestamp < :cutoffDate")
+    suspend fun deleteOlderThan(cutoffDate: String)
 }
 

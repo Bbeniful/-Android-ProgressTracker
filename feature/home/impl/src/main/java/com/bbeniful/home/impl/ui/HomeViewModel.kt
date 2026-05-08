@@ -5,11 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.bbeniful.domain.model.Day
 import com.bbeniful.domain.model.weeklyExercises
 import com.bbeniful.domain.provider.DateProvider
+import com.bbeniful.domain.usecase.CleanOldProgressUseCase
 import com.bbeniful.domain.usecase.CreateWeekWorkoutPlaneUseCase
+import com.bbeniful.domain.usecase.DeleteProgressUseCase
 import com.bbeniful.domain.usecase.GetDailyBodyUseCase
+import com.bbeniful.domain.usecase.ToggleExerciseDoneUseCase
 import com.bbeniful.domain.usecase.GetProgressForExerciseUseCase
+import com.bbeniful.domain.usecase.GetUserProfileUseCase
 import com.bbeniful.domain.usecase.SaveProgressUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,12 +28,17 @@ class HomeViewModel(
     private val dailyBodyParts: GetDailyBodyUseCase,
     private val getProgressForExerciseUseCase: GetProgressForExerciseUseCase,
     private val saveProgressUseCase: SaveProgressUseCase,
-    private val dateProvider: DateProvider
-
+    private val deleteProgressUseCase: DeleteProgressUseCase,
+    private val cleanOldProgressUseCase: CleanOldProgressUseCase,
+    private val toggleExerciseDoneUseCase: ToggleExerciseDoneUseCase,
+    private val dateProvider: DateProvider,
+    private val getUserProfileUseCase: GetUserProfileUseCase
 ) : ViewModel() {
 
     val state: StateFlow<HomeState>
         field = MutableStateFlow<HomeState>(HomeState())
+
+    private var progressJob: Job? = null
 
     val intent = MutableSharedFlow<HomeIntent>()
 
@@ -36,8 +46,9 @@ class HomeViewModel(
         getCurrentDay()
         updateList()
         updateBodyPart()
+        loadUserProfile()
         subscribeToIntent()
-
+        viewModelScope.launch(Dispatchers.IO) { cleanOldProgressUseCase() }
     }
 
     private fun subscribeToIntent() {
@@ -69,6 +80,18 @@ class HomeViewModel(
                     max = event.max
                 )
             }
+
+            is HomeIntent.DeleteProgress -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    deleteProgressUseCase(event.progress)
+                }
+            }
+
+            is HomeIntent.ToggleExerciseDone -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    toggleExerciseDoneUseCase(event.exercise)
+                }
+            }
         }
     }
 
@@ -89,11 +112,9 @@ class HomeViewModel(
         viewModelScope.launch {
             createWeekWorkoutPlaneUseCase().collect { workout ->
                 val plan = workout.workoutForWeek
-                state.update {
-                    it.copy(
-                        exercises = plan[getDay().raw] ?: emptyList()
-                    )
-                }
+                val sorted = (plan[getDay().raw] ?: emptyList())
+                    .sortedWith(compareBy { if (it.orderOnDay == 0) Int.MAX_VALUE else it.orderOnDay })
+                state.update { it.copy(exercises = sorted) }
             }
         }
     }
@@ -132,8 +153,18 @@ class HomeViewModel(
         }
     }
 
-    fun updateProgresses(exerciseId: Int) {
+    private fun loadUserProfile() {
         viewModelScope.launch {
+            getUserProfileUseCase().collect { profile ->
+                state.update { it.copy(userProfile = profile) }
+            }
+        }
+    }
+
+    fun updateProgresses(exerciseId: Int) {
+        progressJob?.cancel()
+        state.update { it.copy(progresses = emptyList()) }
+        progressJob = viewModelScope.launch {
             getProgressForExerciseUseCase(
                 exerciseId = exerciseId
             ).collect { progresses ->

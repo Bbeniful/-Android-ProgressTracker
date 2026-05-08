@@ -63,4 +63,5 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.annotations)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.androidx.compose.material.icons.core)
 }

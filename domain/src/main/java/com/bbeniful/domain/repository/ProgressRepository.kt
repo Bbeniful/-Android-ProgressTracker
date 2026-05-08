@@ -12,4 +12,6 @@ interface ProgressRepository {
     suspend fun add(progress: Progress)
 
     suspend fun remove(progress: Progress)
+
+    suspend fun deleteOlderThan(cutoffDate: String)
 }

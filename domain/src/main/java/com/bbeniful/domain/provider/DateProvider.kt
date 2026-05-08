@@ -7,4 +7,6 @@ interface DateProvider {
     fun getCurrentDay(): Day
 
     fun getCurrentDateAsFormattedString(): String
+
+    fun getCurrentDateOnly(): String
 }
