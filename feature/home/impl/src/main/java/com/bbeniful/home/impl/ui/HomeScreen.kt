@@ -48,8 +48,6 @@ import com.bbeniful.domain.model.Day
 import com.bbeniful.domain.model.Exercise
 import com.bbeniful.domain.model.Progress
 import com.bbeniful.domain.model.UserProfile
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import com.bbeniful.home.impl.ui.component.DailyExercises
 import com.bbeniful.home.impl.ui.component.Days
 import com.bbeniful.home.impl.ui.component.ProgressHalfSheet
@@ -71,6 +69,7 @@ fun HomeScreen(
         progresses = state.progresses,
         selectedDay = state.userSelectedDay ?: state.currentDay,
         userProfile = state.userProfile,
+        doneExerciseIds = state.doneExerciseIds,
         onEvent = viewModel::setEvent,
         toSettings = toSettings,
         toProgressHistory = toProgressHistory,
@@ -87,6 +86,7 @@ internal fun HomeContent(
     currentDay: Day,
     selectedDay: Day,
     userProfile: UserProfile,
+    doneExerciseIds: Set<Int>,
     toSettings: () -> Unit,
     toProgressHistory: (exerciseId: Int, exerciseName: String) -> Unit,
     progresses: List<Progress>,
@@ -124,11 +124,10 @@ internal fun HomeContent(
         )
         Spacer(modifier = Modifier.height(50.dp))
 
-        val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy. MM. dd"))
         DailyExercises(
             dailyBodyParts = dailyBodyPart,
             exercises = exercises,
-            today = today,
+            doneExerciseIds = doneExerciseIds,
             onExerciseClick = { exerciseId ->
                 showBottomSheet = true
                 exerciseIdSaved = exerciseId

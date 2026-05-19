@@ -39,6 +39,8 @@ class HomeViewModel(
         field = MutableStateFlow<HomeState>(HomeState())
 
     private var progressJob: Job? = null
+    private var bodyPartJob: Job? = null
+    private var listJob: Job? = null
 
     val intent = MutableSharedFlow<HomeIntent>()
 
@@ -88,8 +90,11 @@ class HomeViewModel(
             }
 
             is HomeIntent.ToggleExerciseDone -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    toggleExerciseDoneUseCase(event.exercise)
+                val id = event.exercise.id
+                state.update {
+                    val updated = if (id in it.doneExerciseIds) it.doneExerciseIds - id
+                                  else it.doneExerciseIds + id
+                    it.copy(doneExerciseIds = updated)
                 }
             }
         }
@@ -109,7 +114,8 @@ class HomeViewModel(
     }
 
     private fun updateList() {
-        viewModelScope.launch {
+        listJob?.cancel()
+        listJob = viewModelScope.launch {
             createWeekWorkoutPlaneUseCase().collect { workout ->
                 val plan = workout.workoutForWeek
                 val sorted = (plan[getDay().raw] ?: emptyList())
@@ -126,7 +132,8 @@ class HomeViewModel(
     }
 
     private fun updateBodyPart() {
-        viewModelScope.launch {
+        bodyPartJob?.cancel()
+        bodyPartJob = viewModelScope.launch {
             dailyBodyParts(getDay()).collect { bodyParts ->
                 state.update {
                     it.copy(

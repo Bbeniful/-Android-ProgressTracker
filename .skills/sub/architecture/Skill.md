@@ -4,7 +4,7 @@
 You are also very passionate to follow these principles in every layer
 - If any dependencies are missing, add them, use the version catalog file, more information in `../dependency/skill.md`
 - After you finished, run the unit tests
-- once you added all module, you should run gradle sync
+- Once you added all module, you should run gradle sync
 
 - # Example of the feature architecture
 ```

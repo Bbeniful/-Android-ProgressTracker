@@ -23,8 +23,13 @@ abstract class ProgressTrackDatabase : RoomDatabase() {
     companion object {
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
+                // new columns
                 database.execSQL("ALTER TABLE exercise_table ADD COLUMN orderOnDay INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE exercise_table ADD COLUMN completedDate TEXT")
+                // indexes
+                database.execSQL("CREATE INDEX IF NOT EXISTS index_progress_table_exerciseId_timestamp ON progress_table (exerciseId, timestamp)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS index_progress_table_timestamp ON progress_table (timestamp)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS index_exercise_table_day_orderOnDay ON exercise_table (day, orderOnDay)")
             }
         }
     }

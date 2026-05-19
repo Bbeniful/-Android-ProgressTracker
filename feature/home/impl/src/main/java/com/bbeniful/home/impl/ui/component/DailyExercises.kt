@@ -42,7 +42,7 @@ private val doneGreen = Color(0xFF4CAF50)
 fun DailyExercises(
     dailyBodyParts: String,
     exercises: List<Exercise>,
-    today: String,
+    doneExerciseIds: Set<Int>,
     onExerciseClick: (Int) -> Unit,
     onToggleDone: (Exercise) -> Unit
 ) {
@@ -57,7 +57,7 @@ fun DailyExercises(
         items(exercises, key = { it.id }) { exercise ->
             ExerciseItem(
                 exercise = exercise,
-                isDone = exercise.completedDate == today,
+                isDone = exercise.id in doneExerciseIds,
                 onExerciseClick = onExerciseClick,
                 onToggleDone = onToggleDone
             )
@@ -73,6 +73,8 @@ internal fun ExerciseItem(
     onToggleDone: (Exercise) -> Unit
 ) {
     val currentOnExerciseClick by rememberUpdatedState(onExerciseClick)
+    val currentOnToggleDone by rememberUpdatedState(onToggleDone)
+    val currentExercise by rememberUpdatedState(exercise)
 
     Row(
         modifier = Modifier
@@ -110,7 +112,6 @@ internal fun ExerciseItem(
             )
         }
 
-        // circular done checkbox
         Box(
             modifier = Modifier
                 .size(28.dp)
@@ -119,7 +120,7 @@ internal fun ExerciseItem(
                     else Modifier.border(2.dp, Color.White, CircleShape)
                 )
                 .pointerInput(exercise.id) {
-                    detectTapGestures(onTap = { onToggleDone(exercise) })
+                    detectTapGestures(onTap = { currentOnToggleDone(currentExercise) })
                 }
         )
     }

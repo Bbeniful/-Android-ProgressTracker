@@ -13,7 +13,8 @@ data class HomeState(
     val currentDay: Day = Day.Unknown,
     val userSelectedDay: Day? = null,
     val progresses: List<Progress> = emptyList(),
-    val userProfile: UserProfile = UserProfile()
+    val userProfile: UserProfile = UserProfile(),
+    val doneExerciseIds: Set<Int> = emptySet()
 )
 
 sealed interface HomeIntent {
