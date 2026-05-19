@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.bbeniful.nav"
+    namespace = "com.bbeniful.feature.home.nav"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1

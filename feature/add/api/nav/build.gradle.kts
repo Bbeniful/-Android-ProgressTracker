@@ -1,9 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.bbeniful.nav"
+    namespace = "com.bbeniful.feature.add.nav"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -30,4 +31,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+    implementation(libs.kotlinx.serialization.json)
 }

@@ -1,0 +1,72 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.koin.compiler)
+}
+
+android {
+    namespace = "com.bbeniful.feature.statistic.impl"
+    compileSdk {
+        version = release(36) {
+            minorApiLevel = 1
+        }
+    }
+
+    defaultConfig {
+        minSdk = 34
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
+
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xexplicit-backing-fields")
+    }
+}
+
+koinCompiler {
+    compileSafety = false
+    userLogs = true
+}
+
+dependencies {
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
+    implementation(projects.domain)
+    implementation(projects.core.design)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
+    implementation(libs.koin.core)
+    implementation(libs.koin.annotations)
+    implementation(libs.koin.androidx.compose)
+
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbineTest)
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotest.assertions.core)
+}

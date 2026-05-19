@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     alias(libs.plugins.koin.compiler)
+    alias(libs.plugins.protobuf)
 }
 
 android {
@@ -23,10 +24,23 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-
 }
 
 room { schemaDirectory("workout") }
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${libs.versions.protobuf.get()}"
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                create("java") { option("lite") }
+                create("kotlin") { option("lite") }
+            }
+        }
+    }
+}
 
 dependencies {
     implementation(libs.androidx.appcompat)
@@ -43,4 +57,7 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.annotations)
     implementation(libs.koin.androidx.compose)
+
+    implementation(libs.androidx.datastore)
+    implementation(libs.protobuf.kotlin.lite)
 }

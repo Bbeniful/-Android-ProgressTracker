@@ -2,7 +2,7 @@ package com.bbeniful.domain.usecase
 
 import app.cash.turbine.test
 import com.bbeniful.domain.mock.mockExerciseRepo
-import com.bbeniful.domain.model.BodyPart
+import com.bbeniful.domain.model.MuscleGroup
 import com.bbeniful.domain.model.Day
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
@@ -20,12 +20,12 @@ class GetDailyBodyUseCaseTest {
 
     @Test
     fun `should contain chest`() = runTest {
-        val bodyPart = BodyPart.Chest.raw
+        val muscleGroup = MuscleGroup.Chest.raw
         val day = Day.Monday
         val data = useCase(day = day)
         data.test {
             val bodyParts = awaitItem()
-            Assert.assertTrue(bodyParts.contains(bodyPart))
+            Assert.assertTrue(bodyParts.contains(muscleGroup))
             cancelAndIgnoreRemainingEvents()
         }
 

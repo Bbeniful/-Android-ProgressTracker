@@ -73,5 +73,14 @@ dependencies {
     implementation(projects.core.design)
     implementation(projects.feature.home.api.nav)
     implementation(projects.feature.home.impl)
+    implementation(projects.feature.add.api.nav)
+    implementation(projects.feature.add.impl)
+    implementation(projects.feature.settings.api.nav)
+    implementation(projects.feature.settings.impl)
+    implementation(projects.feature.statistic.api.nav)
+    implementation(projects.feature.statistic.impl)
+
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
 
 }

@@ -1,39 +1,39 @@
 package com.bbeniful.domain.model
 
 val weeklyExercises = listOf(
-    // Monday - Chest
-    Exercise(id = 1, name = "Bench Press", isActive = true, circle = 4, rep = 8, day = Day.Monday.raw, type = BodyPart.Chest.raw),
-    Exercise(id = 2, name = "Incline Dumbbell Press", isActive = true, circle = 3, rep = 10, day = Day.Monday.raw, type = BodyPart.Chest.raw),
-    Exercise(id = 3, name = "Cable Flyes", isActive = true, circle = 3, rep = 12, day = Day.Monday.raw, type = BodyPart.Chest.raw),
 
-    // Friday - Biceps
-    Exercise(id = 14, name = "Barbell Curls", isActive = true, circle = 4, rep = 8, day = Day.Monday.raw, type = BodyPart.Biceps.raw),
-    Exercise(id = 15, name = "Dumbbell Curls", isActive = true, circle = 3, rep = 10, day = Day.Monday.raw, type = BodyPart.Biceps.raw),
-    Exercise(id = 16, name = "Hammer Curls", isActive = true, circle = 3, rep = 12, day = Day.Monday.raw, type = BodyPart.Biceps.raw),
+    Exercise(id = 1, name = "Szeles fogasu evezes, alulrol (sarga)", isActive = true, sets = 3, rep = 7, day = Day.Monday.raw, muscleGroup = MuscleGroup.Back.raw),
+    Exercise(id = 2, name = "Szuk evezes alulrol, szeles hatra", isActive = true, sets = 3, rep = 8, day = Day.Monday.raw, muscleGroup = MuscleGroup.Back.raw),
+    Exercise(id = 3, name = "Evezes 45 fok, csigan/barna gep", isActive = true, sets = 3, rep = 8, day = Day.Monday.raw, muscleGroup = MuscleGroup.Back.raw),
+    Exercise(id = 4, name = "Bicepsz, szcot pad", isActive = true, sets = 2, rep = 10, day = Day.Monday.raw, muscleGroup = MuscleGroup.Biceps.raw),
+    Exercise(id = 5, name = "Bicepsz, fuggetlen karos gepen", isActive = true, sets = 2, rep = 10, day = Day.Monday.raw, muscleGroup = MuscleGroup.Biceps.raw),
+    Exercise(id = 6, name = "Oldalemeles ulve, egykezessel 20 fok", isActive = true, sets = 2, rep = 10, day = Day.Monday.raw, muscleGroup = MuscleGroup.Shoulder.raw),
+    Exercise(id = 7, name = "Oldalemeles csigan, lapockacsikban", isActive = true, sets = 2, rep = 10, day = Day.Monday.raw, muscleGroup = MuscleGroup.Shoulder.raw),
 
-    // Tuesday - Back
-    Exercise(id = 4, name = "Deadlifts", isActive = true, circle = 4, rep = 6, day = Day.Tuesday.raw, type = BodyPart.Back.raw),
-    Exercise(id = 5, name = "Barbell Rows", isActive = true, circle = 4, rep = 8, day = Day.Tuesday.raw, type = BodyPart.Back.raw),
-    Exercise(id = 6, name = "Pull-ups", isActive = true, circle = 3, rep = 10, day = Day.Tuesday.raw, type = BodyPart.Back.raw),
+    Exercise(id = 8, name = "Labtolo", isActive = true, sets = 3, rep = 8, day = Day.Tuesday.raw, muscleGroup = MuscleGroup.Leg.raw),
+    Exercise(id = 9, name = "Hajlito", isActive = true, sets = 3, rep = 8, day = Day.Tuesday.raw, muscleGroup = MuscleGroup.Leg.raw),
+    Exercise(id = 10, name = "Bolgar guggolas/kitores", isActive = true, sets = 2, rep = 8, day = Day.Tuesday.raw, muscleGroup = MuscleGroup.Leg.raw),
+    Exercise(id = 11, name = "Tarogatas (szurke)", isActive = true, sets = 3, rep = 9, day = Day.Tuesday.raw, muscleGroup = MuscleGroup.Chest.raw),
+    Exercise(id = 12, name = "Nyomas mogotte (also mell)", isActive = true, sets = 3, rep = 8, day = Day.Tuesday.raw, muscleGroup = MuscleGroup.Chest.raw),
+    Exercise(id = 13, name = "Vallbol nyomas DROP", isActive = true, sets = 1, rep = 10, day = Day.Tuesday.raw, muscleGroup = MuscleGroup.Shoulder.raw),
+    Exercise(id = 14, name = "Tolodzkodo gepen letolas", isActive = true, sets = 2, rep = 10, day = Day.Tuesday.raw, muscleGroup = MuscleGroup.Triceps.raw),
+    Exercise(id = 15, name = "Szeles fogasu letolas", isActive = true, sets = 2, rep = 10, day = Day.Tuesday.raw, muscleGroup = MuscleGroup.Triceps.raw),
 
-
-    // Wednesday - Shoulder
-    Exercise(id = 7, name = "Overhead Press", isActive = true, circle = 4, rep = 8, day = Day.Wednesday.raw, type = BodyPart.Shoulder.raw),
-    Exercise(id = 8, name = "Lateral Raises", isActive = true, circle = 3, rep = 12, day = Day.Wednesday.raw, type = BodyPart.Shoulder.raw),
-    Exercise(id = 9, name = "Reverse Pec Deck", isActive = true, circle = 3, rep = 12, day = Day.Wednesday.raw, type = BodyPart.Shoulder.raw),
-
-    // Saturday - Triceps
-    Exercise(id = 17, name = "Close-Grip Bench Press", isActive = true, circle = 4, rep = 8, day = Day.Wednesday.raw, type = BodyPart.Triceps.raw),
-    Exercise(id = 18, name = "Tricep Dips", isActive = true, circle = 3, rep = 10, day = Day.Wednesday.raw, type = BodyPart.Triceps.raw),
-    Exercise(id = 19, name = "Rope Pushdowns", isActive = true, circle = 3, rep = 12, day = Day.Wednesday.raw, type = BodyPart.Triceps.raw),
-
-    // Thursday - Leg
-    Exercise(id = 10, name = "Squats", isActive = true, circle = 4, rep = 8, day = Day.Thursday.raw, type = BodyPart.Leg.raw),
-    Exercise(id = 11, name = "Leg Press", isActive = true, circle = 3, rep = 10, day = Day.Thursday.raw, type = BodyPart.Leg.raw),
-    Exercise(id = 12, name = "Leg Curls", isActive = true, circle = 3, rep = 12, day = Day.Thursday.raw, type = BodyPart.Leg.raw),
-    Exercise(id = 13, name = "Calf Raises", isActive = true, circle = 3, rep = 15, day = Day.Thursday.raw, type = BodyPart.Leg.raw),
+    Exercise(id = 16, name = "Felulrol szeles, dontot torzs", isActive = true, sets = 4, rep = 7, day = Day.Thursday.raw, muscleGroup = MuscleGroup.Back.raw),
+    Exercise(id = 17, name = "Felulrol szuk lehuzas", isActive = true, sets = 3, rep = 8, day = Day.Thursday.raw, muscleGroup = MuscleGroup.Back.raw),
+    Exercise(id = 18, name = "Szeles fogasu evezes alulrol (csigan)", isActive = true, sets = 2, rep = 8, day = Day.Thursday.raw, muscleGroup = MuscleGroup.Back.raw),
+    Exercise(id = 19, name = "Egykezes bicepsz, valtott kar", isActive = true, sets = 2, rep = 9, day = Day.Thursday.raw, muscleGroup = MuscleGroup.Biceps.raw),
+    Exercise(id = 20, name = "Egykezes bicepsz,csigan valtott kar", isActive = true, sets = 2, rep = 10, day = Day.Thursday.raw, muscleGroup = MuscleGroup.Biceps.raw),
+    Exercise(id = 21, name = "Oldalemeles melkas tamasz padon 40", isActive = true, sets = 2, rep = 12, day = Day.Thursday.raw, muscleGroup = MuscleGroup.Shoulder.raw),
+    Exercise(id = 22, name = "Y-emeles keresztcsigan", isActive = true, sets = 2, rep = 10, day = Day.Thursday.raw, muscleGroup = MuscleGroup.Shoulder.raw),
 
 
+    Exercise(id = 23, name = "Nyomas (szurke fugetlenkaros gep)", isActive = true, sets = 3, rep = 10, day = Day.Friday.raw, muscleGroup = MuscleGroup.Chest.raw),
+    Exercise(id = 24, name = "Tarogatas barna gep", isActive = true, sets = 2, rep = 8, day = Day.Friday.raw, muscleGroup = MuscleGroup.Chest.raw),
+    Exercise(id = 25, name = "Pendulum", isActive = true, sets = 3, rep = 8, day = Day.Friday.raw, muscleGroup = MuscleGroup.Leg.raw),
+    Exercise(id = 26, name = "Labnyujtas", isActive = true, sets = 3, rep = 9, day = Day.Friday.raw, muscleGroup = MuscleGroup.Leg.raw),
+    Exercise(id = 27, name = "Vallbol nyomas", isActive = true, sets = 3, rep = 8, day = Day.Friday.raw, muscleGroup = MuscleGroup.Shoulder.raw),
+    Exercise(id = 28, name = "Egykezes tricepsz kotellel 45", isActive = true, sets = 3, rep = 10, day = Day.Friday.raw, muscleGroup = MuscleGroup.Triceps.raw),
+    Exercise(id = 29, name = "Szuk letolas csigan", isActive = true, sets = 3, rep = 10, day = Day.Friday.raw, muscleGroup = MuscleGroup.Triceps.raw),
 
-    // Sunday - Rest (no exercises)
 )

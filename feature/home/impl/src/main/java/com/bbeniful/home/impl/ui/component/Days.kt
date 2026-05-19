@@ -30,6 +30,7 @@ import com.bbeniful.domain.model.isAfter
 fun Days(
     currentDay: Day,
     restDay: Day,
+    selectedDay: Day,
     onDayClick: (Day) -> Unit
 ) {
     val workoutDays = Day.entries.filter {
@@ -45,6 +46,7 @@ fun Days(
                 isPastDay = currentDay.isAfter(it),
                 isCurrentDay = it == currentDay,
                 isRestDay = it == restDay,
+                isSelectedDay = it == selectedDay,
                 day = it,
                 onDayClick = onDayClick
             )
@@ -57,17 +59,19 @@ private fun DayItem(
     isCurrentDay: Boolean,
     isRestDay: Boolean,
     isPastDay: Boolean,
+    isSelectedDay: Boolean,
     day: Day,
     onDayClick: (Day) -> Unit
 ) {
     val backgroundColor = when {
         isCurrentDay -> darkButton
+        isSelectedDay -> darkButton
         isPastDay -> pastDay
         isRestDay -> Color.Transparent
         else -> Color.Transparent
     }
 
-    val textColor = if (isCurrentDay) {
+    val textColor = if (isCurrentDay || isSelectedDay) {
         dayTextColor
     } else {
         Color.White
@@ -98,6 +102,6 @@ private fun DayItem(
 @Composable
 fun PreviewOfDays() {
     Box(modifier = Modifier.fillMaxSize()) {
-        Days(Day.Monday, Day.Wednesday) {}
+        Days(Day.Monday, Day.Wednesday, Day.Thursday) {}
     }
 }

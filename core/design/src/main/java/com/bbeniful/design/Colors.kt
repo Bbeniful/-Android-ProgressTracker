@@ -15,3 +15,12 @@ val dayTextColor = Color(0xff594983)
 val dayBorder = Color(0xff49454F)
 
 val normalTextColor = Color(0xffE6E0EB)
+
+val addNewLogSmallBg = Color(0xff2B2931)
+
+val darkTextColor = Color(0xff37265E)
+
+val progressIconTint = Color(0xffCAC4D0)
+
+val highlightedListElement = Color(0xffEFB8C8)
+val highlightedIconElement = Color(0xff704654)

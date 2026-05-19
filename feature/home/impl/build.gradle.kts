@@ -1,12 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.koin.compiler)
 }
 
 android {
-    namespace = "com.bbeniful.impl"
+    namespace = "com.bbeniful.feature.home.impl"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -30,6 +29,13 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xexplicit-backing-fields")
     }
+}
+
+koinCompiler {
+
+    compileSafety = false
+
+    userLogs = true
 }
 
 dependencies {
@@ -57,4 +63,5 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.annotations)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.androidx.compose.material.icons.core)
 }

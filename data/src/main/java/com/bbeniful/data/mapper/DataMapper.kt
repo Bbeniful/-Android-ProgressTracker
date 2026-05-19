@@ -9,22 +9,26 @@ val ExerciseDto.toDomain: Exercise
     get() = Exercise(
         id = id,
         name = name,
-        circle = circle,
+        sets = circle,
         rep = rep,
         day = day,
-        type = type,
-        isActive = isActive
+        muscleGroup = type,
+        isActive = isActive,
+        orderOnDay = orderOnDay,
+        completedDate = completedDate
     )
 
 val Exercise.toData: ExerciseDto
     get() = ExerciseDto(
         id = id,
         name = name,
-        circle = circle,
+        circle = sets,
         rep = rep,
         day = day,
-        type = type,
-        isActive = isActive
+        type = muscleGroup,
+        isActive = isActive,
+        orderOnDay = orderOnDay,
+        completedDate = completedDate
     )
 
 val ProgressDto.toDomain: Progress

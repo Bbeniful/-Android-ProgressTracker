@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "com.bbeniful.data";
+option java_multiple_files = true;
+option java_outer_classname = "UserProfileProtoFile";
+
+message UserProfileProto {
+  string first_name = 1;
+  string last_name = 2;
+  string nickname = 3;
+}
