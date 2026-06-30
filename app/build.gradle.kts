@@ -8,15 +8,15 @@ plugins {
 android {
     namespace = "com.bbeniful.progresstrackergym"
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
+        version = release(37) {
+            minorApiLevel = 0
         }
     }
 
     defaultConfig {
         applicationId = "com.bbeniful.progresstrackergym"
         minSdk = 34
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 

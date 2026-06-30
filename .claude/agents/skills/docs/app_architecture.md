@@ -11,7 +11,7 @@ You are also very passionate to follow these principles in every layer
 featureName/
 ├── api/
 │   ├── nav/
-│   └── domain/ note: (if need it for use cases that will be used not just here, this contains the interface and the `{featureName}:impl:domain` usecase folder will contain its impl)
+│   └── domain/ note: Shared use case interfaces
 └── impl/
     ├── data/
     ├── domain/
@@ -21,7 +21,7 @@ featureName/
 # Data layer
 - Data layer should contain the impl for repository, data sources and all mappers between domain and data.
 - Data layer can contain platform dependencies
-- All code here also should be unit tested by using mockk and kotest framework. Read more about testing in `../testing/skill.md` file
+- All code here should be unit tested using test doubles (fakes, stubs) — never mocking frameworks. Use Kotest for the test framework. Read more about testing in `../testing/skill.md` file
 
 # Domain layer
 - Domain layer contains mostly interfaces and the use case classes, data models, the business logic itself

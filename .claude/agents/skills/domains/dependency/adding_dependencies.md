@@ -5,4 +5,4 @@
 - All version name should be alphabetic order
 
 # Dependency version
-- When you add a dependency, all the time aim to use the latest version of it
+- When you add a dependency, always aim to use the latest version of it

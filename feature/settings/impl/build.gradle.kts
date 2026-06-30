@@ -7,8 +7,8 @@ plugins {
 android {
     namespace = "com.bbeniful.feature.settings.impl"
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
+        version = release(37) {
+            minorApiLevel = 0
         }
     }
 
