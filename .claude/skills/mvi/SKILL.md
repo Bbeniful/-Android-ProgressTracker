@@ -1,3 +1,8 @@
+---
+name: mvi
+description: MVI pattern conventions — unidirectional flow, UI state (data class and sealed class), thread-safe state updates, intents, one-time events, and ViewModel/UI wiring. Use whenever creating or modifying a ViewModel, UI state, intents, or handling one-time events, even if MVI isn't mentioned explicitly.
+---
+
 ### MVI Pattern
 - Model -> View -> Intent
 - unidirectional flow

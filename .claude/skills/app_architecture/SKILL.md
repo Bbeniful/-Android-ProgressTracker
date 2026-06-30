@@ -1,3 +1,8 @@
+---
+name: app_architecture
+description: Clean architecture conventions for feature modules — api/impl split, data/domain/presentation layers, layer responsibilities, state and intent patterns. Use whenever creating a new feature module, adding or reviewing a layer, or structuring packages, even if the user doesn't say "architecture".
+---
+
 ### Create clean architecture
 
 - Creating clean architecture is very important. It helps us to have a scalable and easy to read architecture with great separation of concerns. 

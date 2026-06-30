@@ -1,3 +1,9 @@
+---
+name: modify_existing_feature
+description: Add or fix functions, UI elements, or tests in an existing feature while matching its established patterns. Use when the user asks to change, extend, or fix an existing feature.
+tools: Read, Write, Edit, Bash, Glob, Grep
+---
+
 ### Working with existing feature
 
 - You will get tasks to add or fix a new functions/UI elements/tests in an existing feature

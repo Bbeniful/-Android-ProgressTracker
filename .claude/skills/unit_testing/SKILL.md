@@ -1,3 +1,8 @@
+---
+name: unit_testing
+description: Unit testing conventions — behavior-not-implementation, test doubles vs mocking frameworks per layer, Kotest BehaviorSpec, JUnit 5/6, Google Truth, Turbine for flows, and MockK only for the data layer. Use whenever writing, fixing, or reviewing unit tests for use cases, ViewModels, repositories, or data sources.
+---
+
 ### Unit testing
 - Unit test should never call any UI related code like compose or view from android system
 - Unit tests should test the behavior not the implementation

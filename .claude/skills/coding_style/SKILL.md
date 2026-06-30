@@ -1,3 +1,8 @@
+yaml---
+name: coding_style
+description: Kotlin coding style and clean-code rules — extension functions, descriptive naming, parameter/function limits, SOLID, and the Law of Demeter. Use whenever writing or reviewing Kotlin code in this project to keep it idiomatic and consistent.
+---
+
 ### Coding style
 
 ### Kotlin

@@ -27,6 +27,10 @@
             <option value="$PROJECT_DIR$/feature/home/api" />
             <option value="$PROJECT_DIR$/feature/home/api/nav" />
             <option value="$PROJECT_DIR$/feature/home/impl" />
+            <option value="$PROJECT_DIR$/feature/improvement" />
+            <option value="$PROJECT_DIR$/feature/improvement/api" />
+            <option value="$PROJECT_DIR$/feature/improvement/api/nav" />
+            <option value="$PROJECT_DIR$/feature/improvement/impl" />
             <option value="$PROJECT_DIR$/feature/progress" />
             <option value="$PROJECT_DIR$/feature/progress/api" />
             <option value="$PROJECT_DIR$/feature/progress/api/nav" />

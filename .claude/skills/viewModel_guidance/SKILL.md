@@ -1,3 +1,8 @@
+---
+name: viewmodel_guidance
+description: ViewModel implementation rules — presentation-layer responsibility, business-logic-only, MVI intent handling, runCatching error handling, and separate private state-update functions (updateLoading/updateSuccess/updateError). Use whenever writing or reviewing a ViewModel.
+---
+
 ### ViewModel
 - its is part of the presentation layer
 - it should never contain UI logic, only business logic
