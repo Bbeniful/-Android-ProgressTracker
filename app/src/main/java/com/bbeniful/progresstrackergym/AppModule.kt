@@ -3,6 +3,7 @@ package com.bbeniful.progresstrackergym
 import com.bbeniful.add.impl.ui.AddModule
 import com.bbeniful.data.DataModule
 import com.bbeniful.domain.DomainModule
+import com.bbeniful.feature.improvement.impl.ui.ImprovementModule
 import com.bbeniful.feature.settings.impl.ui.SettingsModule
 import com.bbeniful.feature.statistic.impl.ui.StatisticModule
 import com.bbeniful.home.impl.ui.HomeImplModule
@@ -16,7 +17,8 @@ import org.koin.core.annotation.Module
         HomeImplModule::class,
         AddModule::class,
         SettingsModule::class,
-        StatisticModule::class
+        StatisticModule::class,
+        ImprovementModule::class
     ]
 )
 @ComponentScan("com.bbeniful.progresstrackergym")

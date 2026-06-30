@@ -23,6 +23,7 @@ class CreateWeekWorkoutPlaneUseCaseTest {
             Day.Tuesday,
             Day.Wednesday,
             Day.Thursday,
+            Day.Friday,
 
             ).map { it.raw }
 

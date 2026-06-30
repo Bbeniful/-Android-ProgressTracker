@@ -1,9 +1,10 @@
 ### Unit testing
-- Unit test should never call any UI related code like compose or view from android sytem
+- Unit test should never call any UI related code like compose or view from android system
 - Unit tests should test the behavior not the implementation
 - Unit tests name should clearly tell its purpose
-- if you test something from domain or data layer, like use cases or viewModel, never use mocking frameworks
+- if you test something from domain or presentation layer, like use cases or viewModel, never use mocking frameworks
 prefer test doubles like stub, mock or fake classes
+- for data layer, you can use mocking frameworks
 
 ### Unit testing dependencies
 - for unit testing we can use:

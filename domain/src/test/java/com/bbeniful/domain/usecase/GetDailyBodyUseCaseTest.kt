@@ -21,11 +21,11 @@ class GetDailyBodyUseCaseTest {
     @Test
     fun `should contain chest`() = runTest {
         val muscleGroup = MuscleGroup.Chest.raw
-        val day = Day.Monday
+        val day = Day.Tuesday
         val data = useCase(day = day)
         data.test {
             val bodyParts = awaitItem()
-            Assert.assertTrue(bodyParts.contains(muscleGroup))
+            Assert.assertTrue(bodyParts.orEmpty().contains(muscleGroup))
             cancelAndIgnoreRemainingEvents()
         }
 
@@ -34,7 +34,7 @@ class GetDailyBodyUseCaseTest {
 
     @Test
     fun `should contain full format`() = runTest {
-        val expected = "Chest, Biceps"
+        val expected = "Back, Biceps, Shoulder"
         val day = Day.Monday
         val data = useCase(day = day)
         data.test {

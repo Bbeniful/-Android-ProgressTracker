@@ -14,4 +14,14 @@ val mockExerciseRepo = object : ExerciseRepository {
         weeklyExercises
     )
 
+    override fun getById(id: Int): Flow<Exercise?> = flowOf(weeklyExercises.find { it.id == id })
+
+    override suspend fun deleteById(id: Int) {
+    }
+
+    override suspend fun getByDayAndOrder(day: String, order: Int): Exercise? =
+        weeklyExercises.find { it.day == day && it.orderOnDay == order }
+
+    override suspend fun updateCompletedDate(id: Int, date: String?) {
+    }
 }

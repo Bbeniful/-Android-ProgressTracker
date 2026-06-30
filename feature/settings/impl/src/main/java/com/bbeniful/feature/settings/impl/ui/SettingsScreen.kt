@@ -48,7 +48,8 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = koinViewModel(),
     onBack: () -> Unit = {},
     onAddExercise: () -> Unit,
-    onEditExercise: (Int) -> Unit
+    onEditExercise: (Int) -> Unit,
+    onOpenImprovements: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -62,6 +63,7 @@ fun SettingsScreen(
         )
         state.showUserProfile -> UserProfileScreen(
             userProfile = state.userProfile,
+            isProfileSaved = state.isProfileSaved,
             onEvent = viewModel::setEvent,
             onBack = { viewModel.setEvent(SettingsIntent.HideUserProfile) }
         )
@@ -69,7 +71,8 @@ fun SettingsScreen(
             state = state,
             onEvent = viewModel::setEvent,
             onBack = onBack,
-            onAddExercise = onAddExercise
+            onAddExercise = onAddExercise,
+            onOpenImprovements = onOpenImprovements
         )
     }
 }
@@ -79,7 +82,8 @@ internal fun SettingsContent(
     state: SettingsState,
     onEvent: (SettingsIntent) -> Unit,
     onBack: () -> Unit,
-    onAddExercise: () -> Unit
+    onAddExercise: () -> Unit,
+    onOpenImprovements: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -124,6 +128,31 @@ internal fun SettingsContent(
                 onShowAllExercises = { onEvent(SettingsIntent.ShowExerciseList) }
             )
         }
+
+        item {
+            HorizontalDivider(color = Color.DarkGray)
+        }
+
+        item {
+            ImprovementsSection(onOpenImprovements = onOpenImprovements)
+        }
+    }
+}
+
+@Composable
+internal fun ImprovementsSection(onOpenImprovements: () -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = "Coaching",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = normalTextColor
+        )
+        SettingsMenuItem(
+            title = "Improvements",
+            subtitle = "Personalized tips based on your training history",
+            onClick = onOpenImprovements
+        )
     }
 }
 

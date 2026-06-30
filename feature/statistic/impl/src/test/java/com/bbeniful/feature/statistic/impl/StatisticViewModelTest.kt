@@ -25,8 +25,8 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 
 private val fakeExercises = listOf(
-    Exercise(id = 1, name = "Bench Press", sets = 3, rep = 10, day = Day.Monday.raw, muscleGroup = MuscleGroup.Chest.raw),
-    Exercise(id = 2, name = "Squat", sets = 4, rep = 8, day = Day.Tuesday.raw, muscleGroup = MuscleGroup.Leg.raw)
+    Exercise(id = 1, name = "Bench Press", isActive = true, sets = 3, rep = 10, day = Day.Monday.raw, muscleGroup = MuscleGroup.Chest.raw),
+    Exercise(id = 2, name = "Squat", isActive = true, sets = 4, rep = 8, day = Day.Tuesday.raw, muscleGroup = MuscleGroup.Leg.raw)
 )
 
 private val fakeProgresses = listOf(
@@ -36,7 +36,11 @@ private val fakeProgresses = listOf(
 
 private val fakeExerciseRepository = object : ExerciseRepository {
     override fun getAll(): Flow<List<Exercise>> = flowOf(fakeExercises)
+    override fun getById(id: Int): Flow<Exercise?> = flowOf(fakeExercises.find { it.id == id })
     override suspend fun add(exercise: Exercise) {}
+    override suspend fun deleteById(id: Int) {}
+    override suspend fun getByDayAndOrder(day: String, order: Int): Exercise? = null
+    override suspend fun updateCompletedDate(id: Int, date: String?) {}
 }
 
 private val fakeProgressRepository = object : ProgressRepository {
@@ -44,6 +48,7 @@ private val fakeProgressRepository = object : ProgressRepository {
         flowOf(fakeProgresses.filter { it.exerciseId == exerciseId })
     override suspend fun add(progress: Progress) {}
     override suspend fun remove(progress: Progress) {}
+    override suspend fun deleteOlderThan(cutoffDate: String) {}
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)

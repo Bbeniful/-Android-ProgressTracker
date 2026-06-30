@@ -58,15 +58,15 @@ class PostsViewModel : ViewModel() {
     }
 
     private fun updateLoading() {
-        _uiState.update { PostsUiState.Loading }
+        uiState.update { PostsUiState.Loading }
     }
 
     private fun updateSuccess(posts: List<String>) {
-        _uiState.update { PostsUiState.Success(posts) }
+        uiState.update { PostsUiState.Success(posts) }
     }
 
     private fun updateError(message: String) {
-        _uiState.update { PostsUiState.Error(message) }
+        uiState.update { PostsUiState.Error(message) }
     }
 
     fun setIntent(intent: PostsIntent) {

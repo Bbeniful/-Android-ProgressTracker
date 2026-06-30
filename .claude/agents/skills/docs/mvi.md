@@ -109,3 +109,22 @@ LaunchedEffect(Unit) {
     viewModel.setIntent(Intent.LoadData)
 }
 ```
+### Onr time event
+- In MVI, everything is part of the state
+- one time event is the same, it should be part of the ui data
+- Example:
+```kotlin
+data class UIState(
+    val message: String? = null
+)
+```
+- in viewmodel you have to have a set and set back function
+- UI will handle it by sending an event
+- Example:
+```kotlin
+sealed interface Intent {
+    data object ShowMessage: Intent
+    data object MessageShown: Intent
+}
+```
+- this should be handled trough `LaunchedEffect` on view side.

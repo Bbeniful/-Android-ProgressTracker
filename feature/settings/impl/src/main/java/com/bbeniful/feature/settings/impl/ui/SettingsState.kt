@@ -13,6 +13,7 @@ data class SettingsState(
     val showExerciseList: Boolean = false,
     val showUserProfile: Boolean = false,
     val selectedMuscleGroup: MuscleGroup? = null,
+    val isProfileSaved: Boolean = false,
     val error: String? = null
 ) {
     val filteredExercises: List<Exercise>
@@ -25,6 +26,7 @@ sealed interface SettingsIntent {
     data class UpdateLastName(val lastName: String) : SettingsIntent
     data class UpdateNickname(val nickname: String) : SettingsIntent
     data object SaveUserProfile : SettingsIntent
+    data object ProfileSavedHandled : SettingsIntent
     data object ShowExerciseList : SettingsIntent
     data object HideExerciseList : SettingsIntent
     data object ShowUserProfile : SettingsIntent

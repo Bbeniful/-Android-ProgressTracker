@@ -12,6 +12,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.bbeniful.add.impl.ui.AddScreen
+import com.bbeniful.feature.improvement.impl.ui.ImprovementScreen
+import com.bbeniful.feature.improvement.nav.ImprovementNavKey
 import com.bbeniful.feature.settings.impl.ui.SettingsScreen
 import com.bbeniful.feature.settings.api.nav.SettingsNavKey
 import com.bbeniful.feature.statistic.impl.ui.StatisticScreen
@@ -63,11 +65,15 @@ fun Navigation(backstack: SnapshotStateList<Any>) {
                 SettingsScreen(
                     onBack = { backstack.removeLastOrNull() },
                     onAddExercise = { backstack.add(AddNavKey()) },
-                    onEditExercise = { id -> backstack.add(AddNavKey(exerciseId = id)) }
+                    onEditExercise = { id -> backstack.add(AddNavKey(exerciseId = id)) },
+                    onOpenImprovements = { backstack.add(ImprovementNavKey) }
                 )
             }
             entry<StatisticNavKey> {
                 StatisticScreen()
+            }
+            entry<ImprovementNavKey> {
+                ImprovementScreen(onBack = { backstack.removeLastOrNull() })
             }
         }
     )

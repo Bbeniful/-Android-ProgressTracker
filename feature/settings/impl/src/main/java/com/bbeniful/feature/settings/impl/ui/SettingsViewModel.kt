@@ -44,6 +44,7 @@ class SettingsViewModel(
             is SettingsIntent.UpdateLastName -> state.update { it.copy(userProfile = it.userProfile.copy(lastName = event.lastName)) }
             is SettingsIntent.UpdateNickname -> state.update { it.copy(userProfile = it.userProfile.copy(nickname = event.nickname)) }
             SettingsIntent.SaveUserProfile -> saveUserProfile()
+            SettingsIntent.ProfileSavedHandled -> state.update { it.copy(isProfileSaved = false) }
             SettingsIntent.ShowExerciseList -> state.update { it.copy(showExerciseList = true) }
             SettingsIntent.HideExerciseList -> state.update { it.copy(showExerciseList = false, selectedMuscleGroup = null) }
             SettingsIntent.ShowUserProfile -> state.update { it.copy(showUserProfile = true) }
@@ -77,6 +78,7 @@ class SettingsViewModel(
     private fun saveUserProfile() {
         viewModelScope.launch(Dispatchers.IO) {
             saveUserProfileUseCase(state.value.userProfile)
+            state.update { it.copy(isProfileSaved = true) }
         }
     }
 }

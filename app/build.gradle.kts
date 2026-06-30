@@ -79,6 +79,8 @@ dependencies {
     implementation(projects.feature.settings.impl)
     implementation(projects.feature.statistic.api.nav)
     implementation(projects.feature.statistic.impl)
+    implementation(projects.feature.improvement.api.nav)
+    implementation(projects.feature.improvement.impl)
 
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
